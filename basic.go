@@ -27,12 +27,12 @@ func getFeed(context *gin.Context) {
 }
 
 // http://127.0.0.1:8080/douyin/user/login
-func postLogin(ctx *gin.Context) {
+func postUserLogin(ctx *gin.Context) {
 
 }
 
 // curl -v --form Username=user --form Password=password http://127.0.0.1:8080/douyin/user/register
-func postRegister(ctx *gin.Context) {
+func postUserRegister(ctx *gin.Context) {
 	var request = &proto.DouyinUserRegisterRequest{}
 	var response = &proto.DouyinUserRegisterResponse{}
 	if ctx.ShouldBind(request) == nil {
@@ -49,4 +49,12 @@ func postRegister(ctx *gin.Context) {
 	response.StatusCode = &statusCode
 	response.UserId = &userId
 	ctx.ProtoBuf(http.StatusOK, response)
+}
+func getUser(ctx *gin.Context) {}
+
+func postPublishAction(ctx *gin.Context) {
+
+}
+func getPublishList(ctx *gin.Context) {
+
 }

@@ -14,9 +14,15 @@ func main() {
 }
 func registerBasicHandles(engine *gin.Engine) {
 	var feedHandle gin.HandlerFunc = getFeed
-	var loginHandle gin.HandlerFunc = postLogin
-	var registerHandle = postRegister
+	var userLoginHandle gin.HandlerFunc = postUserLogin
+	var userRegisterHandle = postUserRegister
+	var userHandle = getUser
+	var publishActionHandle = postPublishAction
+	var publishListHandle = getPublishList
 	engine.GET("/douyin/feed/", feedHandle)
-	engine.POST("/douyin/user/register", registerHandle)
-	engine.POST("/douyin/user/login", loginHandle)
+	engine.POST("/douyin/user/register", userRegisterHandle)
+	engine.POST("/douyin/user/login", userLoginHandle)
+	engine.GET("/douyin/user", userHandle)
+	engine.POST("/douyin/publish/action", publishActionHandle)
+	engine.GET("/douyin/publish/list", publishListHandle)
 }
