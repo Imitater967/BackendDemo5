@@ -1,4 +1,4 @@
-package main
+package route
 
 import (
 	"ByteTechTraining/proto"
@@ -9,7 +9,7 @@ import (
 
 // http://127.0.0.1:8080/douyin/feed/?Token=1&LatestTime=2
 // 按理来说上面的应该会被成功执行,但结果并不是
-func getFeed(context *gin.Context) {
+func GetFeed(context *gin.Context) {
 	var request = proto.DouyinFeedRequest{}
 	if context.ShouldBind(&request) == nil {
 		log.Printf("Latest Time %d\n", *request.LatestTime)
@@ -27,12 +27,12 @@ func getFeed(context *gin.Context) {
 }
 
 // http://127.0.0.1:8080/douyin/user/login
-func postUserLogin(ctx *gin.Context) {
+func PostUserLogin(ctx *gin.Context) {
 
 }
 
 // curl -v --form Username=user --form Password=password http://127.0.0.1:8080/douyin/user/register
-func postUserRegister(ctx *gin.Context) {
+func PostUserRegister(ctx *gin.Context) {
 	var request = &proto.DouyinUserRegisterRequest{}
 	var response = &proto.DouyinUserRegisterResponse{}
 	if ctx.ShouldBind(request) == nil {
@@ -50,11 +50,11 @@ func postUserRegister(ctx *gin.Context) {
 	response.UserId = &userId
 	ctx.ProtoBuf(http.StatusOK, response)
 }
-func getUser(ctx *gin.Context) {}
+func GetUser(ctx *gin.Context) {}
 
-func postPublishAction(ctx *gin.Context) {
+func PostPublishAction(ctx *gin.Context) {
 
 }
-func getPublishList(ctx *gin.Context) {
+func GetPublishList(ctx *gin.Context) {
 
 }

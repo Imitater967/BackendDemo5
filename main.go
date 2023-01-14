@@ -1,6 +1,7 @@
 package main
 
 import (
+	route "ByteTechTraining/route"
 	"github.com/gin-gonic/gin"
 	_ "gorm.io/driver/sqlite"
 	_ "gorm.io/gorm"
@@ -13,12 +14,12 @@ func main() {
 	server.Run()
 }
 func registerBasicHandles(engine *gin.Engine) {
-	var feedHandle gin.HandlerFunc = getFeed
-	var userLoginHandle gin.HandlerFunc = postUserLogin
-	var userRegisterHandle = postUserRegister
-	var userHandle = getUser
-	var publishActionHandle = postPublishAction
-	var publishListHandle = getPublishList
+	var feedHandle gin.HandlerFunc = route.GetFeed
+	var userLoginHandle gin.HandlerFunc = route.PostUserLogin
+	var userRegisterHandle = route.PostUserRegister
+	var userHandle = route.GetUser
+	var publishActionHandle = route.PostPublishAction
+	var publishListHandle = route.GetPublishList
 	engine.GET("/douyin/feed/", feedHandle)
 	engine.POST("/douyin/user/register", userRegisterHandle)
 	engine.POST("/douyin/user/login", userLoginHandle)
