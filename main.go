@@ -11,7 +11,20 @@ import (
 func main() {
 	server := gin.Default()
 	registerBasicHandles(server)
+	registerInteractHandles(server)
 	server.Run()
+}
+func registerInteractHandles(engine *gin.Engine) {
+	var favoriteActionHandle = route.PostFavoriteAction
+	var favoriteListHandle = route.GetFavoriteList
+	var commentActionHandle = route.PostCommentAction
+	var commentListHandle = route.GetCommentList
+
+	engine.POST("/douyin/favorite/action/", favoriteActionHandle)
+	engine.GET("/douyin/favorite/list/", favoriteListHandle)
+	engine.POST("/douyin/comment/action", commentActionHandle)
+	engine.GET("/douyin/comment/list", commentListHandle)
+
 }
 func registerBasicHandles(engine *gin.Engine) {
 	var feedHandle gin.HandlerFunc = route.GetFeed
