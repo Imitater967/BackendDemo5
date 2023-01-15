@@ -1,7 +1,8 @@
+//视频流接口
 syntax = "proto2";
 package douyin.core;
 option go_package ="./proto";
-
+import  public "user.proto";
 message douyin_feed_request{
   optional int64 latest_time=1;
   optional string token=2;
@@ -13,21 +14,13 @@ message douyin_feed_response{
   repeated Video video_list=3;
   optional int64 next_time=4;
 }
-message Video{
-  required int64 id=1;
-  required User author=2;
-  required string play_url=3;
-  required string cover_url=4;
-  required int64 favorite_count=5;
-  required int64 comment_count=6;
-  required bool is_favorite=7;
-  required string title=8;
-}
-
-message User{
-  required int64 id=1;
-  required string name=2;
-  optional int64 follow_count=3;
-  optional int64 follower_count=4;
-  required bool is_follow=5;
+message Video {
+  required int64 id = 1; // 视频唯一标识​
+  required User author = 2; // 视频作者信息
+  required string play_url = 3; // 视频播放地址
+  required string cover_url = 4; // 视频封面地址
+  required int64 favorite_count = 5; // 视频的点赞总数
+  required int64 comment_count = 6; // 视频的评论总数
+  required bool is_favorite = 7; // true-已点赞，false-未点赞
+  required string title = 8; // 视频标题
 }
