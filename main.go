@@ -9,11 +9,27 @@ import (
 )
 
 func main() {
-	server := gin.Default()
+	server := gin.New()
+	server.Use(gin.Logger())
+	server.Use(gin.Recovery())
+	server.Use(tokenVerify()) // 使用token校验中间件
+
 	registerBasicHandles(server)
 	registerInteractHandles(server)
-	server.Run()
+	server.Run(":8080")
 }
+
+// token校验中间件 负责校验user身份
+func tokenVerify() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		// 前置操作
+
+		ctx.Next()
+
+		// 后置操作
+	}
+}
+
 func registerInteractHandles(engine *gin.Engine) {
 	var favoriteActionHandle = route.PostFavoriteAction
 	var favoriteListHandle = route.GetFavoriteList
