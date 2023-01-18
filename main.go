@@ -10,7 +10,22 @@ import (
 )
 
 func main() {
+	println("----程序开始运行----")
+	println("-开始读取数据库")
+	ConnectDB()
+	println("-数据库读取完成")
+	println("-开始准备HTTP服务")
+	Serve()
+
+	println("----程序运行结束----")
+}
+func ConnectDB() {
 	orm.ConnectToDatabase()
+	//orm.UploadComment()
+	//orm.UploadUserInfo()
+	//orm.GetComment()
+}
+func Serve() {
 	server := gin.New()
 	server.Use(gin.Logger())
 	server.Use(gin.Recovery())
