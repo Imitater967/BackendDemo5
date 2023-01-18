@@ -1,6 +1,7 @@
 package main
 
 import (
+	"ByteTechTraining/orm"
 	route "ByteTechTraining/route"
 	"github.com/gin-gonic/gin"
 	_ "gorm.io/driver/sqlite"
@@ -9,11 +10,11 @@ import (
 )
 
 func main() {
+	orm.ConnectToDatabase()
 	server := gin.New()
 	server.Use(gin.Logger())
 	server.Use(gin.Recovery())
 	server.Use(tokenVerify()) // 使用token校验中间件
-
 	registerBasicHandles(server)
 	registerInteractHandles(server)
 	server.Run(":8080")
