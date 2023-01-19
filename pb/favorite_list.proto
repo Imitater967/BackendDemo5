@@ -1,6 +1,6 @@
 syntax = "proto2";
 package douyin.extra.first;
-option go_package ="./proto";
+option go_package = "./proto";
 import "feed.proto";
 message douyin_favorite_list_request {
   required int64 user_id = 1; // 用户id
