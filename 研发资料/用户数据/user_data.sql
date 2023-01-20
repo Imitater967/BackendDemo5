@@ -1,3 +1,4 @@
+use gostudy;
 DROP TABLE IF EXISTS `comment`;
 CREATE TABLE `comment` (
                            `VideoId` INT NOT NULL,

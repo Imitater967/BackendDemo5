@@ -1,3 +1,4 @@
+use gostudy;
 DROP TABLE IF EXISTS `user_auth`;
 CREATE TABLE `user_auth` (
                              `username` VARCHAR(50) NOT NULL,
