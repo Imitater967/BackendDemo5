@@ -32,9 +32,9 @@ func (m *UserAuthDao) Login() error {
 	sql := database.GetMysqlClient()
 	var data = UserAuthDao{}
 	//如果找不到会有报错,找得到则没有
-	var tx = sql.Where("name", m.Name).Where("password", m.Password).Find(&data)
+	var tx = sql.Where("name", m.Name).Where("password", m.Password).First(&data)
 	if tx.Error != nil {
-		errors.New("登录失败,用户名或密码错误")
+		return errors.New("登录失败,用户名或密码错误")
 	}
 	m.Token = GenerateToken()
 	m.Expire = time.Now().AddDate(0, 0, 7)

@@ -12,7 +12,7 @@ func PostUserLogin(ctx *gin.Context) {
 	var request = proto.DouyinUserLoginRequest{}
 	var response = proto.DouyinUserLoginResponse{}
 
-	var err = ctx.ShouldBind(&request)
+	var err = ctx.ShouldBindQuery(&request)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, err)
 		return
@@ -25,7 +25,12 @@ func PostUserLogin(ctx *gin.Context) {
 	var authDao = daos.UserAuthDao{}
 	authDao.Name = request.GetUsername()
 	authDao.Password = request.GetPassword()
-	authDao.Login()
+	err = authDao.Login()
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+	ctx.JSON(http.StatusOK, &response)
 }
 
 // 注册时候,调用登录,进行token的生成与管理
