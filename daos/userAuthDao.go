@@ -36,12 +36,12 @@ func (m *UserAuthDao) Login() error {
 	if tx.Error != nil {
 		return errors.New("登录失败,用户名或密码错误")
 	}
-	m.Token = GenerateToken()
+	m.GenerateToken()
 	m.Expire = time.Now().AddDate(0, 0, 7)
 	return nil
 }
 
 // 生成token,并从数据库中检测是否有相等的token
-func GenerateToken() string {
-	return "123456"
+func (m *UserAuthDao) GenerateToken() {
+	m.Token = "123456"
 }
