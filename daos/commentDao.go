@@ -10,15 +10,10 @@ type CommentDao struct {
 	models.CommentModel
 }
 
-// TableName 指定CommentDao对应的表名
-func (CommentDao) TableName() string {
-	return "comment"
-}
-
 // Get 查
 func (m *CommentDao) Get() error {
 	mysqlManage := database.GetMysqlClient()
-	return mysqlManage.Where("is_deleted", 0).Find(m).Error
+	return mysqlManage.Where("deleted", 0).Find(m).Error
 }
 
 // Add 增
@@ -51,5 +46,5 @@ func (m *CommentDao) Delete() error {
 	if err != nil {
 		return err
 	}
-	return mysqlManage.Model(&m).Update("is_deleted", 1).Error
+	return mysqlManage.Model(&m).Update("deleted", 1).Error
 }
