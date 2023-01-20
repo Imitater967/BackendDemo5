@@ -9,3 +9,7 @@ type CommentModel struct {
 	IsDeleted   int       `gorm:"column:is_deleted;type:tinyint(1);default:0"`
 	CreateTime  time.Time `gorm:"column:create_time;type:timestamp;default:CURRENT_TIMESTAMP"`
 }
+
+func (CommentModel) TableName() string {
+	return "comment"
+}

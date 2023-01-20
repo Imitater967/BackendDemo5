@@ -13,7 +13,7 @@ type CommentDao struct {
 // Get 查
 func (m *CommentDao) Get() error {
 	mysqlManage := database.GetMysqlClient()
-	return mysqlManage.Where("IsDelete", 0).Find(m).Error
+	return mysqlManage.Where("is_deleted", 0).Find(m).Error
 }
 
 // Add 增
@@ -46,5 +46,5 @@ func (m *CommentDao) Delete() error {
 	if err != nil {
 		return err
 	}
-	return mysqlManage.Model(&m).Update("IsDeleted", 1).Error
+	return mysqlManage.Model(&m).Update("is_deleted", 1).Error
 }
