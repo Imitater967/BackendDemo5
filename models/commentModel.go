@@ -8,9 +8,9 @@ type CommentModel struct {
 	VideoId int64
 	Content string
 	Deleted int
-	Date    time.Time `gorm:"type:timestamp;default:CURRENT_TIMESTAMP"`
+	Date    time.Time
 }
 
-func (CommentModel) TableName() string {
+func (*CommentModel) TableName() string {
 	return "comment"
 }
