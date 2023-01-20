@@ -1,7 +1,9 @@
--- CREATE TABLE IF NOT EXISTS `user_data`(
--- `user_id` INT UNSIGNED AUTO_INCREMENT,
--- `follow` VARCHAR(100) NOT NULL,
--- `runoob_author` VARCHAR(40) NOT NULL,
--- `submission_date` DATE,
--- PRIMARY KEY ( `runoob_id` )
--- )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+DROP TABLE IF EXISTS `comment`;
+CREATE TABLE `comment` (
+                           `VideoId` INT NOT NULL,
+                           `CommentId` INT NOT NULL AUTO_INCREMENT,
+                           `Content` VARCHAR(1023) NOT NULL,
+                           `CreateDate` DATE NOT NULL,
+                           PRIMARY KEY (`CommentId`),
+                           UNIQUE KEY `VideoId` (`VideoId`)
+);
