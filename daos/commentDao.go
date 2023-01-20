@@ -10,6 +10,11 @@ type CommentDao struct {
 	models.CommentModel
 }
 
+// TableName 指定CommentDao对应的表名
+func (CommentDao) TableName() string {
+	return "comment"
+}
+
 // Get 查
 func (m *CommentDao) Get() error {
 	mysqlManage := database.GetMysqlClient()
