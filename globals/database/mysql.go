@@ -32,7 +32,7 @@ func InitMysqlClient() (err error) {
 	)
 	mysqlClient, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
-		return nil
+		return err
 	}
 	return nil
 }

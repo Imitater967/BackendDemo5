@@ -9,6 +9,7 @@ func main() {
 	// 初始化数据库
 	err := settings.InitDatabase()
 	if err != nil {
+		panic(err)
 		return
 	}
 
