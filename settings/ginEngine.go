@@ -8,6 +8,8 @@ import (
 
 func InitGinEngine() (*gin.Engine, error) {
 	engine := gin.New()
+	gin.SetMode(gin.DebugMode)
+
 	engine.Use(gin.Logger())
 	engine.Use(gin.Recovery())
 	engine.Use(middlewares.TokenVerify())    // 加载token校验中间件
