@@ -3,7 +3,6 @@ package daos
 import (
 	"ByteTechTraining/globals/database"
 	"ByteTechTraining/models"
-	"errors"
 )
 
 type CommentDao struct {
@@ -19,11 +18,6 @@ func (m *CommentDao) Get() error {
 // Add 增
 func (m *CommentDao) Add() error {
 	mysqlManage := database.GetMysqlClient()
-
-	err := m.Get()
-	if err == nil {
-		return errors.New("数据已存在")
-	}
 
 	// 创建一条评论记录并返回error信息
 	return mysqlManage.Create(&m).Error

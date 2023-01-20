@@ -22,7 +22,7 @@ func PostCommentAction(ctx *gin.Context) {
 	//缺少用户校队
 	if 1 == request.GetActionType() {
 		var commentObj daos.CommentDao
-		commentObj.Id = *request.CommentId
+		//commentObj.Id = *request.CommentId
 		commentObj.Content = *request.CommentText
 		commentObj.VideoId = *request.VideoId
 		commentObj.Date = time.Now()
@@ -49,7 +49,7 @@ func PostCommentAction(ctx *gin.Context) {
 		var statusMsg string = "删除成功"
 		var statusCode int32 = 0
 		if err != nil {
-			statusCode = 1
+			statusCode = 2
 			statusMsg = err.Error()
 		}
 
