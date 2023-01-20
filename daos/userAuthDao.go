@@ -13,14 +13,16 @@ type UserAuthDao struct {
 
 func (m *UserAuthDao) Get() error {
 	mysqlManage := database.GetMysqlClient()
-	return mysqlManage.Where("name", m.Name).Find(m).Error
+	return mysqlManage.Where("name", m.Name).First(&m).Error
 }
-func (m *UserAuthDao) Add() error {
+func (m *UserAuthDao) Register() error {
 	mysqlManage := database.GetMysqlClient()
 	err := m.Get()
+	//没有则会返回错误,也就是如果有,就没有返回错误
 	if err == nil {
 		return errors.New("数据已存在")
 	}
+	m.Expire = time.Now().AddDate(0, 0, 7)
 	// 创建一条评论记录并返回error信息
 	return mysqlManage.Create(&m).Error
 }
@@ -35,7 +37,7 @@ func (m *UserAuthDao) Login() error {
 		errors.New("登录失败,用户名或密码错误")
 	}
 	m.Token = GenerateToken()
-	m.Expire = time.Now()
+	m.Expire = time.Now().AddDate(0, 0, 7)
 	return nil
 }
 

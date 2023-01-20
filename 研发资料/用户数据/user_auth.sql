@@ -5,8 +5,7 @@ CREATE TABLE `user_auth` (
                              `password` VARCHAR(50) NOT NULL,
                              `id` INT NOT NULL AUTO_INCREMENT,
                              `token` VARCHAR(50) DEFAULT NULL,
-                             `expire` INT DEFAULT NULL,
+                             `expire` timestamp DEFAULT NULL,
                              PRIMARY KEY (`Id`),
-                             UNIQUE KEY `name` (`name`),
-                             UNIQUE KEY `Token` (`token`)
+                             UNIQUE KEY `name` (`name`)
 );

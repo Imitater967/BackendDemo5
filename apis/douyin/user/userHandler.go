@@ -4,6 +4,7 @@ import (
 	"ByteTechTraining/daos"
 	"ByteTechTraining/proto"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 )
 
@@ -38,11 +39,12 @@ func PostUserRegister(ctx *gin.Context) {
 	}
 	var userAuth daos.UserAuthDao
 	userAuth.Name = request.GetUsername()
+	log.Println("The Result Is " + userAuth.Name)
 	userAuth.Password = request.GetPassword()
 	var statusMsg string = "注册成功"
 	var statusCode int32 = 0
 	var userId int64 = 1
-	var addErr = userAuth.Add()
+	var addErr = userAuth.Register()
 	if addErr != nil {
 		statusCode = 1
 		statusMsg = addErr.Error()
