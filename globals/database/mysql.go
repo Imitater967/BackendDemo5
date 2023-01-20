@@ -27,7 +27,9 @@ func InitMysqlClient() (err error) {
 	//	v.GetString("mysql.port"),
 	//	v.GetString("mysql.database"),
 	//)
-	//mysqlClient, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	//mysqlClient, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
+	//	PrepareStmt: true,
+	//})
 	//if err != nil {
 	//	return
 	//}
