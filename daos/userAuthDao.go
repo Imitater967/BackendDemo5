@@ -13,11 +13,15 @@ type UserAuthDao struct {
 
 func (m *UserAuthDao) Get() error {
 	mysqlManage := database.GetMysqlClient()
+	return mysqlManage.Where("token", m.Token).First(&m).Error
+}
+func (m *UserAuthDao) Query() error {
+	mysqlManage := database.GetMysqlClient()
 	return mysqlManage.Where("name", m.Name).First(&m).Error
 }
 func (m *UserAuthDao) Register() error {
 	mysqlManage := database.GetMysqlClient()
-	err := m.Get()
+	err := m.Query()
 	//没有则会返回错误,也就是如果有,就没有返回错误
 	if err == nil {
 		return errors.New("数据已存在")
@@ -32,12 +36,14 @@ func (m *UserAuthDao) Login() error {
 	sql := database.GetMysqlClient()
 	var data = UserAuthDao{}
 	//如果找不到会有报错,找得到则没有
-	var tx = sql.Where("name", m.Name).Where("password", m.Password).First(&data)
+	var tx = sql.Where("name", &m.Name).Where("password", &m.Password).First(&data)
 	if tx.Error != nil {
 		return errors.New("登录失败,用户名或密码错误")
 	}
 	m.GenerateToken()
 	m.Expire = time.Now().AddDate(0, 0, 7)
+	sql.Model(&m).Where("name", &m.Name).Updates(UserAuthDao{models.UserAuthModel{
+		Token: m.Token, Expire: m.Expire}})
 	return nil
 }
 

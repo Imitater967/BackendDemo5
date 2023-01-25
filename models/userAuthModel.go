@@ -5,7 +5,7 @@ import "time"
 type UserAuthModel struct {
 	Name     string
 	Password string
-	Id       string
+	Id       int64
 	Token    string
 	Expire   time.Time
 }
