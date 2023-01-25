@@ -3,18 +3,28 @@ package daos
 import (
 	"ByteTechTraining/globals/database"
 	"ByteTechTraining/models"
+	"gorm.io/gorm"
 	"time"
 )
 
 type VideoDao struct {
 	models.VideoModel
+	tx *gorm.DB `gorm:"-"`
 }
 
 // 上传
-func (m *VideoDao) Upload() error {
+
+func (m *VideoDao) PreUpload() error {
 	mysqlManage := database.GetMysqlClient()
+	m.tx = mysqlManage.Begin()
 	m.Date = time.Now() // 创建一条评论记录并返回error信息
-	return mysqlManage.Create(&m).Error
+	return m.tx.Create(&m).Error
+}
+func (m *VideoDao) CancelUpload() {
+	m.tx.Rollback()
+}
+func (m *VideoDao) FinishUpload() error {
+	return m.tx.Commit().Error
 }
 
 // Get 查
