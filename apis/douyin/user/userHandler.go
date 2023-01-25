@@ -19,9 +19,12 @@ func PostUserLogin(ctx *gin.Context) {
 	}
 	var code int32 = 1
 	var msg = "登录成功"
+	var userId int64
+	var userToken string
+	response.UserId = &userId
+	response.Token = &userToken
 	response.StatusCode = &code
 	response.StatusMsg = &msg
-
 	var authDao = daos.UserAuthDao{}
 	authDao.Name = request.GetUsername()
 	authDao.Password = request.GetPassword()
@@ -30,6 +33,9 @@ func PostUserLogin(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
+	userId = authDao.Id
+	userToken = authDao.Token
+
 	ctx.JSON(http.StatusOK, &response)
 }
 

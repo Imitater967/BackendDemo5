@@ -12,6 +12,9 @@ type UserAuthDao struct {
 }
 
 func (m *UserAuthDao) Get() error {
+	if m.Token == "" {
+		return errors.New("Token Can't Be Null")
+	}
 	mysqlManage := database.GetMysqlClient()
 	return mysqlManage.Where("token", m.Token).First(&m).Error
 }
