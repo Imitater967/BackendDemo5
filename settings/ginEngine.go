@@ -2,6 +2,7 @@ package settings
 
 import (
 	"ByteTechTraining/apis/douyin"
+	"ByteTechTraining/apis/video"
 	"ByteTechTraining/middlewares"
 	"github.com/gin-gonic/gin"
 )
@@ -17,6 +18,6 @@ func InitGinEngine() (*gin.Engine, error) {
 
 	// 初始化路由组
 	douyin.InitApiRouter(engine)
-
+	video.InitApiRouter(engine)
 	return engine, nil
 }
