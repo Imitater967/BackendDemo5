@@ -37,9 +37,8 @@ func (m *UserAuthDao) Register() error {
 // 用户登录, 生成新的Token并刷新token时间
 func (m *UserAuthDao) Login() error {
 	sql := database.GetMysqlClient()
-	var data = UserAuthDao{}
 	//如果找不到会有报错,找得到则没有
-	var tx = sql.Where("name", &m.Name).Where("password", &m.Password).First(&data)
+	var tx = sql.Where("name", &m.Name).Where("password", &m.Password).First(&m)
 	if tx.Error != nil {
 		return errors.New("登录失败,用户名或密码错误")
 	}

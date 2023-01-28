@@ -77,8 +77,38 @@ func PostPublishAction(ctx *gin.Context) {
 }
 
 func GetPublishList(ctx *gin.Context) {
-	ctx.JSON(200, gin.H{
-		"status_code": 200,
-		"message":     "list",
-	})
+	request := proto.DouyinPublishListRequest{}
+	response := proto.DouyinPublishListResponse{}
+	//request绑定
+	var requestErr = ctx.ShouldBindQuery(&request)
+	if requestErr != nil {
+		ctx.JSON(http.StatusBadRequest, requestErr)
+		return
+	}
+
+	//respond相关信息
+	statusMsg := "获取成功"
+	var statusCode int32 = 0
+	var videos = make([]*proto.Video, 0)
+	response.StatusMsg = &statusMsg
+	response.StatusCode = &statusCode
+	//从数据库中获取视频
+	videoDaos, queryErr := daos.GetVideos(request.GetUserId())
+	if queryErr != nil {
+		statusMsg = queryErr.Error()
+		ctx.JSON(http.StatusOK, &response)
+		return
+	}
+	//遍历查询到的数据,填写至video
+	for _, dao := range videoDaos {
+		var video = proto.Video{}
+		videos = append(videos, &video)
+		video.Title = &dao.Title
+		video.Id = &dao.Id
+		var playUrl = "http://localhost:8080/file/?id=" + strconv.FormatInt(*video.Id, 10)
+		video.PlayUrl = &playUrl
+	}
+	//这个变量不是指针变量,所以需要重新赋值
+	response.VideoList = videos
+	ctx.JSON(http.StatusOK, &response)
 }

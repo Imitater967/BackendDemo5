@@ -35,6 +35,7 @@ func PostUserLogin(ctx *gin.Context) {
 	}
 	userId = authDao.Id
 	userToken = authDao.Token
+	log.Printf("Login user %d with token %s \n", authDao.Id, userToken)
 
 	ctx.JSON(http.StatusOK, &response)
 }

@@ -31,7 +31,15 @@ func (m *VideoDao) FinishUpload() error {
 func (m *VideoDao) Get() error {
 	mysqlManage := database.GetMysqlClient()
 	return mysqlManage.Where("id", m.Id).Where("deleted", 0).First(m).Error
-} // Delete 删
+}
+func GetVideos(uploader int64) ([]VideoDao, error) {
+	var videos []VideoDao
+	mysqlManager := database.GetMysqlClient()
+	db := mysqlManager.Model(&VideoDao{}).Where("uploader", uploader).Find(&videos)
+	return videos, db.Error
+}
+
+// Delete 删
 func (m *VideoDao) Delete() error {
 	mysqlManage := database.GetMysqlClient()
 	err := m.Get()
