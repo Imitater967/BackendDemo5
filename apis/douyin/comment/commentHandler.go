@@ -4,6 +4,7 @@ import (
 	"ByteTechTraining/daos"
 	"ByteTechTraining/proto"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 	"time"
 )
@@ -17,46 +18,54 @@ func PostCommentAction(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, err)
 		return
 	}
-
+	userAuthDao := daos.UserAuthDao{}
+	//相关变量
+	var statusMsg string = "填写成功"
+	var statusCode int32 = 0
+	var comment *proto.Comment
+	response.StatusMsg = &statusMsg
+	response.StatusCode = &statusCode
+	response.Comment = comment
+	var commentObj daos.CommentDao
+	//1.从表单中获取Token,检索相关用户
+	userAuthDao.Token = *request.Token
+	var userExitErr = userAuthDao.Get()
+	if userExitErr != nil {
+		statusMsg = userExitErr.Error()
+		ctx.JSON(http.StatusOK, &response)
+		log.Println("User Not Login")
+		return
+	}
 	// action_type = 1表示写评论， action_type = 2表示删评论
 	//缺少用户校队
 	if 1 == request.GetActionType() {
-		var commentObj daos.CommentDao
 		//commentObj.Id = *request.CommentId
 		commentObj.Content = request.GetCommentText()
 		commentObj.VideoId = request.GetVideoId()
 		commentObj.Date = time.Now()
-		var statusMsg string = "填写成功"
-		var statusCode int32 = 0
-		var comment *proto.Comment
 		err := commentObj.Add()
 		if err != nil {
 			statusCode = 1
 			statusMsg = err.Error()
+			ctx.JSON(http.StatusOK, &response)
+			return
 		}
-		response.StatusMsg = &statusMsg
-		response.StatusCode = &statusCode
-		response.Comment = comment
+		statusMsg = "填写成功"
 		ctx.JSON(http.StatusOK, &response)
 
 	}
 	//删除评论
 	//缺少用户校队
 	if 2 == request.GetActionType() {
-		var commentObj daos.CommentDao
 		commentObj.Id = request.GetCommentId()
 		err := commentObj.Delete()
-		var statusMsg string = "删除成功"
-		var statusCode int32 = 0
 		if err != nil {
 			statusCode = 2
 			statusMsg = err.Error()
+			ctx.JSON(http.StatusOK, &response)
+			return
 		}
-
-		var comment *proto.Comment
-		response.StatusMsg = &statusMsg
-		response.StatusCode = &statusCode
-		response.Comment = comment
+		statusMsg = "删除成功"
 		ctx.JSON(http.StatusOK, &response)
 	}
 	return
