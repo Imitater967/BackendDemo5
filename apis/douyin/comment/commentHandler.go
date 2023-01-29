@@ -28,7 +28,7 @@ func PostCommentAction(ctx *gin.Context) {
 	response.Comment = comment
 	var commentObj daos.CommentDao
 	//1.从表单中获取Token,检索相关用户
-	userAuthDao.Token = *request.Token
+	userAuthDao.Token = request.GetToken()
 	var userExitErr = userAuthDao.Get()
 	if userExitErr != nil {
 		statusMsg = userExitErr.Error()
@@ -36,10 +36,10 @@ func PostCommentAction(ctx *gin.Context) {
 		log.Println("User Not Login")
 		return
 	}
+
 	// action_type = 1表示写评论， action_type = 2表示删评论
 	//缺少用户校队
 	if 1 == request.GetActionType() {
-		//commentObj.Id = *request.CommentId
 		commentObj.Content = request.GetCommentText()
 		commentObj.VideoId = request.GetVideoId()
 		commentObj.Date = time.Now()

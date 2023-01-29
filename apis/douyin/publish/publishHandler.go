@@ -15,7 +15,8 @@ func PostPublishAction(ctx *gin.Context) {
 	request := proto.DouyinPublishActionRequest{}
 	response := proto.DouyinPublishActionResponse{}
 	//request绑定
-	var requestErr = ctx.ShouldBindQuery(&request)
+	var requestErr = ctx.ShouldBind(&request)
+
 	if requestErr != nil {
 		ctx.JSON(http.StatusBadRequest, requestErr)
 		return
@@ -29,7 +30,8 @@ func PostPublishAction(ctx *gin.Context) {
 	videoDao := daos.VideoDao{}
 	userAuthDao := daos.UserAuthDao{}
 	//1.从表单中获取Token,检索相关用户
-	userAuthDao.Token = *request.Token
+	//userAuthDao.Token = *request.Token
+	userAuthDao.Token = request.GetToken()
 	var userExitErr = userAuthDao.Get()
 	if userExitErr != nil {
 		statusMsg = userExitErr.Error()
@@ -37,8 +39,10 @@ func PostPublishAction(ctx *gin.Context) {
 		log.Println("User Not Login")
 		return
 	}
+
 	//2. 配置视频信息
-	videoDao.Title = *request.Title
+	//videoDao.Title = *request.Title
+	videoDao.Title = request.GetTitle()
 	videoDao.Uploader = userAuthDao.Id
 	//从body中名为data的表单中提取文件
 	video, fileErr := ctx.FormFile("data")
@@ -59,9 +63,10 @@ func PostPublishAction(ctx *gin.Context) {
 	filePath := strings.Builder{}
 	//uplaoded-video/
 	filePath.WriteString(utils.GetFilePath())
-	//生成的文件id这句是错误的
-	//filePath.WriteString(string(videoDao.Id))
 	filePath.WriteString(strconv.FormatInt(videoDao.Id, 10))
+	fileExt := strings.SplitAfter(video.Filename, ".")[1]
+	filePath.WriteString("." + fileExt)
+
 	fileSaveErr := ctx.SaveUploadedFile(video, filePath.String())
 	if fileSaveErr != nil {
 		statusMsg = fileSaveErr.Error()
@@ -70,7 +75,13 @@ func PostPublishAction(ctx *gin.Context) {
 		videoDao.CancelUpload()
 		return
 	}
-	videoDao.FinishUpload()
+	uploadErr = videoDao.FinishUpload()
+	if uploadErr != nil {
+		statusMsg = uploadErr.Error()
+		ctx.JSON(http.StatusOK, &response)
+		log.Println("File Upload Fail")
+		return
+	}
 	statusMsg = "上传成功,id" + strconv.FormatInt(videoDao.Id, 10)
 	ctx.JSON(http.StatusOK, &response)
 
@@ -101,11 +112,13 @@ func GetPublishList(ctx *gin.Context) {
 	}
 	//遍历查询到的数据,填写至video
 	for _, dao := range videoDaos {
-		var video = proto.Video{}
+		var (
+			video   = proto.Video{}
+			playUrl = "http://localhost:8080/file/?id=" + strconv.FormatInt(*video.Id, 10)
+		)
 		videos = append(videos, &video)
 		video.Title = &dao.Title
 		video.Id = &dao.Id
-		var playUrl = "http://localhost:8080/file/?id=" + strconv.FormatInt(*video.Id, 10)
 		video.PlayUrl = &playUrl
 	}
 	//这个变量不是指针变量,所以需要重新赋值

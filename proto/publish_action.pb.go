@@ -25,9 +25,9 @@ type DouyinPublishActionRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Token *string `protobuf:"bytes,1,req,name=token" json:"token,omitempty"` // 用户鉴权token
+	Token *string `protobuf:"bytes,1,req,name=token" json:"token,omitempty" form:"token" binding:"required"` // 用户鉴权token
 	Data  []byte  `protobuf:"bytes,2,req,name=data" json:"data,omitempty"`   // 视频数据
-	Title *string `protobuf:"bytes,3,req,name=title" json:"title,omitempty"` // 视频标题
+	Title *string `protobuf:"bytes,3,req,name=title" json:"title,omitempty" form:"title" binding:"required"` // 视频标题
 }
 
 func (x *DouyinPublishActionRequest) Reset() {

@@ -25,8 +25,8 @@ type DouyinUserLoginRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Username *string `protobuf:"bytes,1,req,name=username" json:"username,omitempty"` // 登录用户名
-	Password *string `protobuf:"bytes,2,req,name=password" json:"password,omitempty"` // 登录密码
+	Username *string `protobuf:"bytes,1,req,name=username" json:"username,omitempty" form:"username" binding:"required"` // 登录用户名
+	Password *string `protobuf:"bytes,2,req,name=password" json:"password,omitempty" form:"password" binding:"required"`// 登录密码
 }
 
 func (x *DouyinUserLoginRequest) Reset() {
