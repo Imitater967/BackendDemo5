@@ -104,7 +104,7 @@ func GetPublishList(ctx *gin.Context) {
 	response.StatusMsg = &statusMsg
 	response.StatusCode = &statusCode
 	//从数据库中获取视频
-	videoDaos, queryErr := daos.GetVideos(request.GetUserId())
+	videoDaos, queryErr := daos.GetUploadedVideos(request.GetUserId())
 	if queryErr != nil {
 		statusMsg = queryErr.Error()
 		ctx.JSON(http.StatusOK, &response)

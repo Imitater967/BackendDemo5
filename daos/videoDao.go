@@ -32,8 +32,8 @@ func (m *VideoDao) Get() error {
 	mysqlManage := database.GetMysqlClient()
 	return mysqlManage.Where("id", m.Id).Where("deleted", 0).First(m).Error
 }
-func GetVideos(uploader int64) ([]VideoDao, error) {
-	var videos []VideoDao
+func GetUploadedVideos(uploader int64) ([]*VideoDao, error) {
+	var videos []*VideoDao
 	mysqlManager := database.GetMysqlClient()
 	db := mysqlManager.Model(&VideoDao{}).Where("uploader", uploader).Find(&videos)
 	return videos, db.Error

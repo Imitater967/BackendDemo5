@@ -36,7 +36,7 @@ func (m *VideoFavoriteDao) Unmark() error {
 }
 
 // 根据用户id,返回所有符合条件的喜欢记录
-func GetResults(user int64) ([]*VideoFavoriteDao, error) {
+func GetFavoriteVideos(user int64) ([]*VideoFavoriteDao, error) {
 	var videos []*VideoFavoriteDao
 	mysqlManager := database.GetMysqlClient()
 	db := mysqlManager.Model(&VideoDao{}).Where("user", user).Find(&videos)
