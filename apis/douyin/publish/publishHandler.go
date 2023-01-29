@@ -112,13 +112,11 @@ func GetPublishList(ctx *gin.Context) {
 	}
 	//遍历查询到的数据,填写至video
 	for _, dao := range videoDaos {
-		var (
-			video   = proto.Video{}
-			playUrl = "http://localhost:8080/file/?id=" + strconv.FormatInt(*video.Id, 10)
-		)
+		var video = proto.Video{}
 		videos = append(videos, &video)
 		video.Title = &dao.Title
 		video.Id = &dao.Id
+		playUrl := "http://localhost:8080/file/?id=" + strconv.FormatInt(*video.Id, 10)
 		video.PlayUrl = &playUrl
 	}
 	//这个变量不是指针变量,所以需要重新赋值

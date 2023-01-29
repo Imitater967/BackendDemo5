@@ -39,6 +39,6 @@ func (m *VideoFavoriteDao) Unmark() error {
 func GetFavoriteVideos(user int64) ([]*VideoFavoriteDao, error) {
 	var videos []*VideoFavoriteDao
 	mysqlManager := database.GetMysqlClient()
-	db := mysqlManager.Model(&VideoDao{}).Where("user", user).Find(&videos)
+	db := mysqlManager.Where("user", user).Find(&videos)
 	return videos, db.Error
 }

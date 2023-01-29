@@ -2,10 +2,12 @@ package favorite
 
 import (
 	"ByteTechTraining/daos"
+	"ByteTechTraining/models"
 	"ByteTechTraining/proto"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 func PostFavoriteAction(ctx *gin.Context) {
@@ -65,23 +67,54 @@ func PostFavoriteAction(ctx *gin.Context) {
 }
 
 func GetFavoriteList(ctx *gin.Context) {
+	//请求和回复的变量
 	var request = proto.DouyinFavoriteListRequest{}
 	var response = proto.DouyinFavoriteListResponse{}
 
 	var statusMsg string = "successful"
 	var statusCode int32 = 0
-	var videoList []*proto.Video
+	var videos = make([]*proto.Video, 0)
 	response.StatusMsg = &statusMsg
 	response.StatusCode = &statusCode
-	response.VideoList = videoList
-	err := ctx.ShouldBindQuery(&request)
-	if err != nil {
-		statusMsg = err.Error()
+	//请求数据绑定
+	bindErr := ctx.ShouldBindQuery(&request)
+	if bindErr != nil {
+		statusMsg = bindErr.Error()
 		statusCode = http.StatusBadRequest
 		ctx.JSON(http.StatusBadRequest, &response)
 		return
 	}
-
+	//用户登录
+	userAuthDao := daos.UserAuthDao{}
+	userAuthDao.Token = request.GetToken()
+	var userExitErr = userAuthDao.Get()
+	if userExitErr != nil {
+		statusMsg = userExitErr.Error()
+		ctx.JSON(http.StatusOK, &response)
+		log.Println("User Not Login")
+		return
+	}
+	favoriteDao, sqlErr := daos.GetFavoriteVideos(userAuthDao.Id)
+	if sqlErr != nil {
+		statusMsg = sqlErr.Error()
+		ctx.JSON(http.StatusOK, &response)
+		return
+	}
+	for _, dao := range favoriteDao {
+		videoDao := daos.VideoDao{VideoModel: models.VideoModel{Id: dao.Video}}
+		var sqlErr = videoDao.Get()
+		if sqlErr != nil {
+			continue
+		}
+		var video = proto.Video{}
+		videos = append(videos, &video)
+		video.Title = &videoDao.Title
+		video.Id = &videoDao.Id
+		playUrl := "http://localhost:8080/file/?id=" + strconv.FormatInt(*video.Id, 10)
+		video.PlayUrl = &playUrl
+	}
+	//这个变量不是指针变量,所以需要重新赋值
+	response.VideoList = videos
 	ctx.JSON(http.StatusOK, &response)
 	return
 }
