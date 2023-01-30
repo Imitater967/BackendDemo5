@@ -43,13 +43,13 @@ func (m *UserAuthDao) Login() error {
 	if tx.Error != nil {
 		return errors.New("登录失败,用户名或密码错误")
 	}
-	token, err := utils.GenerateToken((*m).UserAuthModel)
+	token, err, exp := utils.GenerateToken((*m).UserAuthModel)
 	if err != nil {
 		return errors.New("token生成失败")
 	}
 	m.Token = token
-
-	m.Expire = time.Now().AddDate(0, 0, 7)
+	m.Expire = exp
+	
 	sql.Model(&m).Where("name", &m.Name).Updates(UserAuthDao{models.UserAuthModel{
 		Token: m.Token, Expire: m.Expire}})
 	return nil

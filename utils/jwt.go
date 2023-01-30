@@ -16,16 +16,21 @@ const TokenExpireDuration = time.Hour * 2
 
 var MyKey = []byte("secret") // 密钥 后续通过统一的配置文件读取
 
-func GenerateToken(model models.UserAuthModel) (string, error) {
+func GenerateToken(model models.UserAuthModel) (string, error, time.Time) {
+	exp := time.Now().Add(TokenExpireDuration)
 	myClaims := MyClaims{
 		ID: model.Id,
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(TokenExpireDuration).Unix(), // 过期时间
-			Issuer:    "Frogs",                                    // 签发人
+			ExpiresAt: exp.Unix(), // 过期时间
+			Issuer:    "Frogs",    // 签发人
 		},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, myClaims)
-	return token.SignedString(MyKey)
+	tokenString, err := token.SignedString(MyKey)
+	if err != nil {
+		return "", err, time.Time{}
+	}
+	return tokenString, nil, exp
 }
 
 func ParseToken(tokenString string) (*MyClaims, error) {
