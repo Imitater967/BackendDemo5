@@ -3,6 +3,7 @@ package daos
 import (
 	"ByteTechTraining/globals/database"
 	"ByteTechTraining/models"
+	"ByteTechTraining/utils"
 	"errors"
 	"time"
 )
@@ -42,14 +43,14 @@ func (m *UserAuthDao) Login() error {
 	if tx.Error != nil {
 		return errors.New("登录失败,用户名或密码错误")
 	}
-	m.GenerateToken()
+	token, err := utils.GenerateToken((*m).UserAuthModel)
+	if err != nil {
+		return errors.New("token生成失败")
+	}
+	m.Token = token
+
 	m.Expire = time.Now().AddDate(0, 0, 7)
 	sql.Model(&m).Where("name", &m.Name).Updates(UserAuthDao{models.UserAuthModel{
 		Token: m.Token, Expire: m.Expire}})
 	return nil
-}
-
-// 生成token,并从数据库中检测是否有相等的token
-func (m *UserAuthDao) GenerateToken() {
-	m.Token = "123456"
 }
