@@ -2,6 +2,7 @@ package user
 
 import (
 	"ByteTechTraining/daos"
+	"ByteTechTraining/models"
 	"ByteTechTraining/proto"
 	"github.com/gin-gonic/gin"
 	"log"
@@ -71,5 +72,28 @@ func PostUserRegister(ctx *gin.Context) {
 }
 
 func GetUser(ctx *gin.Context) {
+	var request = proto.DouyinUserRequest{}
+	var response = proto.DouyinUserResponse{}
+	var err = ctx.ShouldBindQuery(&request)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, err)
+		return
+	}
+	var statusMsg string = "查询成功"
+	var statusCode int32 = 0
+	var user = proto.User{}
+	response.StatusCode = &statusCode
+	response.StatusMsg = &statusMsg
+	response.User = &user
+	var userDao = daos.UserAuthDao{models.UserAuthModel{Token: request.GetToken(), Id: user.GetId()}}
+	var loginErr = userDao.Get()
+	if loginErr != nil {
+		statusMsg = loginErr.Error()
+		ctx.JSON(http.StatusOK, &response)
+	}
+	user.Name = &userDao.Name
+	user.Id = &userDao.Id
 
+	ctx.JSON(http.StatusOK, &response)
+	return
 }

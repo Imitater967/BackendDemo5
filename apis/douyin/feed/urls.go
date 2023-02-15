@@ -8,5 +8,5 @@ var (
 
 func InitFeedRouterGroup(engine *gin.RouterGroup) {
 	Api = engine.Group("/feed")
-	Api.POST("/", GetFeed)
+	Api.GET("/", GetFeed)
 }

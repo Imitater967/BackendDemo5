@@ -38,6 +38,15 @@ func GetUploadedVideos(uploader int64) ([]*VideoDao, error) {
 	db := mysqlManager.Model(&VideoDao{}).Where("uploader", uploader).Find(&videos)
 	return videos, db.Error
 }
+func QueryFeed(date time.Time) ([]*VideoDao, time.Time, error) {
+	var videos []*VideoDao
+	mysqlManager := database.GetMysqlClient()
+	//select * from test where create_time >= '投稿时间' order by cast(date as datetime) desc
+	db := mysqlManager.Model(&VideoDao{}).Limit(30).Order("date desc").Where("date > ?", date).Find(&videos)
+	var lastVideo VideoDao
+	db.Last(&lastVideo)
+	return videos, lastVideo.Date, db.Error
+}
 
 // Delete 删
 func (m *VideoDao) Delete() error {

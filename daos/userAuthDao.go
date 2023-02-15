@@ -19,13 +19,17 @@ func (m *UserAuthDao) Get() error {
 	mysqlManage := database.GetMysqlClient()
 	return mysqlManage.Where("token", m.Token).First(&m).Error
 }
-func (m *UserAuthDao) Query() error {
+func (m *UserAuthDao) QueryByName() error {
 	mysqlManage := database.GetMysqlClient()
 	return mysqlManage.Where("name", m.Name).First(&m).Error
 }
+func (m *UserAuthDao) QueryById() error {
+	mysqlManage := database.GetMysqlClient()
+	return mysqlManage.Where("id", m.Id).First(&m).Error
+}
 func (m *UserAuthDao) Register() error {
 	mysqlManage := database.GetMysqlClient()
-	err := m.Query()
+	err := m.QueryByName()
 	//没有则会返回错误,也就是如果有,就没有返回错误
 	if err == nil {
 		return errors.New("数据已存在")
@@ -49,7 +53,7 @@ func (m *UserAuthDao) Login() error {
 	}
 	m.Token = token
 	m.Expire = exp
-	
+
 	sql.Model(&m).Where("name", &m.Name).Updates(UserAuthDao{models.UserAuthModel{
 		Token: m.Token, Expire: m.Expire}})
 	return nil
