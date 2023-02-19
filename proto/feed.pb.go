@@ -25,8 +25,8 @@ type DouyinFeedRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	LatestTime *int64  `protobuf:"varint,1,opt,name=latest_time,json=latestTime" json:"latest_time,omitempty"`
-	Token      *string `protobuf:"bytes,2,opt,name=token" json:"token,omitempty"`
+	LatestTime *int64  `form:"latest_time" protobuf:"varint,1,opt,name=latest_time,json=latestTime" json:"latest_time,omitempty"`
+	Token      *string `form:"token" protobuf:"bytes,2,opt,name=token" json:"token,omitempty"`
 }
 
 func (x *DouyinFeedRequest) Reset() {

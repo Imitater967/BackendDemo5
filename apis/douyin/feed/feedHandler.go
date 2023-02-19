@@ -24,7 +24,11 @@ func GetFeed(context *gin.Context) {
 	response.StatusMsg = &msg
 	response.StatusCode = &statusCode
 	response.NextTime = &nextTime
-	var timeStamp = time.Unix(*request.LatestTime, 0)
+	var timeStamp = time.Unix(0, 0)
+	if request.LatestTime != nil {
+		timeStamp = time.Unix(*request.LatestTime, 0)
+	}
+
 	var videoDaos, time, err = daos.QueryFeed(timeStamp)
 	if err != nil {
 		msg = err.Error()
@@ -37,7 +41,7 @@ func GetFeed(context *gin.Context) {
 		videoList = append(videoList, &video)
 		video.Title = &dao.Title
 		video.Id = &dao.Id
-		playUrl := "http://localhost:8080/file/?id=" + strconv.FormatInt(*video.Id, 10)
+		playUrl := "http://192.168.31.195:8080/file/?id=" + strconv.FormatInt(*video.Id, 10)
 		video.PlayUrl = &playUrl
 		authDao := daos.UserAuthDao{models.UserAuthModel{Id: dao.Uploader}}
 		err = authDao.QueryById()
@@ -47,6 +51,11 @@ func GetFeed(context *gin.Context) {
 		var user = proto.User{}
 		user.Name = &authDao.Name
 		user.Id = &authDao.Id
+		isFollow := false
+		var follow int64 = 0
+		user.IsFollow = &isFollow
+		user.FollowerCount = &follow
+		user.FollowCount = &follow
 		video.Author = &user
 	}
 	response.VideoList = videoList

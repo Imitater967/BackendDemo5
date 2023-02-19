@@ -18,7 +18,7 @@ func PostPublishAction(ctx *gin.Context) {
 	var requestErr = ctx.ShouldBind(&request)
 
 	if requestErr != nil {
-		ctx.JSON(http.StatusBadRequest, requestErr)
+		ctx.JSON(http.StatusBadRequest, requestErr.Error())
 		return
 	}
 
@@ -32,6 +32,7 @@ func PostPublishAction(ctx *gin.Context) {
 	//1.从表单中获取Token,检索相关用户
 	//userAuthDao.Token = *request.Token
 	userAuthDao.Token = request.GetToken()
+	log.Println(*request.Token)
 	var userExitErr = userAuthDao.Get()
 	if userExitErr != nil {
 		statusMsg = userExitErr.Error()
@@ -116,7 +117,7 @@ func GetPublishList(ctx *gin.Context) {
 		videos = append(videos, &video)
 		video.Title = &dao.Title
 		video.Id = &dao.Id
-		playUrl := "http://localhost:8080/file/?id=" + strconv.FormatInt(*video.Id, 10)
+		playUrl := "http://192.168.31.195:8080/file/?id=" + strconv.FormatInt(*video.Id, 10)
 		video.PlayUrl = &playUrl
 	}
 	//这个变量不是指针变量,所以需要重新赋值

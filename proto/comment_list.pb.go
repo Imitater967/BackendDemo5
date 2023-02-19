@@ -25,8 +25,8 @@ type DouyinCommentListRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Token   *string `protobuf:"bytes,1,req,name=token" json:"token,omitempty"`                     // 用户鉴权token
-	VideoId *int64  `protobuf:"varint,2,req,name=video_id,json=videoId" json:"video_id,omitempty"` // 视频id
+	Token   *string `form:"token" protobuf:"bytes,1,req,name=token" json:"token,omitempty"`                        // 用户鉴权token
+	VideoId *int64  `form:"video_id" protobuf:"varint,2,req,name=video_id,json=videoId" json:"video_id,omitempty"` // 视频id
 }
 
 func (x *DouyinCommentListRequest) Reset() {

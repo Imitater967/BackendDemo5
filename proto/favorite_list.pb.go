@@ -25,8 +25,8 @@ type DouyinFavoriteListRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserId *int64  `protobuf:"varint,1,req,name=user_id,json=userId" json:"user_id,omitempty"` // 用户id
-	Token  *string `protobuf:"bytes,2,req,name=token" json:"token,omitempty"`                  // 用户鉴权token
+	UserId *int64  `form:"user_id" protobuf:"varint,1,req,name=user_id,json=userId" json:"user_id,omitempty"` // 用户id
+	Token  *string `form:"token" protobuf:"bytes,2,req,name=token" json:"token,omitempty"`                    // 用户鉴权token
 }
 
 func (x *DouyinFavoriteListRequest) Reset() {

@@ -25,8 +25,8 @@ type DouyinUserRegisterRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Username *string `protobuf:"bytes,1,req,name=username" json:"username,omitempty" form:"username" binding:"required"`
-	Password *string `protobuf:"bytes,2,req,name=password" json:"password,omitempty" form:"password" binding:"required"`
+	Username *string `form:"username" protobuf:"bytes,1,req,name=username" json:"username,omitempty" form:"username" binding:"required"`
+	Password *string `form:"password" protobuf:"bytes,2,req,name=password" json:"password,omitempty" form:"password" binding:"required"`
 }
 
 func (x *DouyinUserRegisterRequest) Reset() {

@@ -25,9 +25,9 @@ type DouyinFavoriteActionRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Token      *string `protobuf:"bytes,1,req,name=token" json:"token,omitempty"`                              // 用户鉴权token
-	VideoId    *int64  `protobuf:"varint,2,req,name=video_id,json=videoId" json:"video_id,omitempty"`          // 视频id
-	ActionType *int32  `protobuf:"varint,3,req,name=action_type,json=actionType" json:"action_type,omitempty"` // 1-点赞，2-取消点赞
+	Token      *string `form:"token" protobuf:"bytes,1,req,name=token" json:"token,omitempty"`                                    // 用户鉴权token
+	VideoId    *int64  `form:"video_id" protobuf:"varint,2,req,name=video_id,json=videoId" json:"video_id,omitempty"`             // 视频id
+	ActionType *int32  `form:"action_type" protobuf:"varint,3,req,name=action_type,json=actionType" json:"action_type,omitempty"` // 1-点赞，2-取消点赞
 }
 
 func (x *DouyinFavoriteActionRequest) Reset() {
